@@ -1,0 +1,21 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+name: ${{ values.name }}
+namespace: default
+description: ${{ values.description }}
+annotations:
+github.com/project-slug: ${{ values.repoOwner }}/${{ values.repoName }}
+backstage.io/source-location: url:https://github.com/${{ values.repoOwner }}/${{ values.repoName }}/tree/main/
+backstage.io/techdocs-ref: dir:.
+tags:
+- fastapi
+- python
+- kubernetes
+- sre
+- platform-engineering
+spec:
+type: service
+lifecycle: ${{ values.lifecycle }}
+owner: ${{ values.owner }}
+system: ${{ values.system }}

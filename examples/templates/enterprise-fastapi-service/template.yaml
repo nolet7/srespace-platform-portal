@@ -1,0 +1,124 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: enterprise-fastapi-service
+  title: Enterprise FastAPI Service
+  description: Golden-path template for creating a production-ready FastAPI service with Docker, Kubernetes, CI/CD, Catalog metadata, and TechDocs.
+  tags:
+    - python
+    - fastapi
+    - kubernetes
+    - docker
+    - github-actions
+    - techdocs
+    - sre
+    - platform-engineering
+spec:
+  owner: platform-engineering
+  type: service
+
+  parameters:
+    - title: Service Information
+      required:
+        - name
+        - description
+        - owner
+        - system
+      properties:
+        name:
+          title: Service Name
+          type: string
+          description: Lowercase service name using hyphens.
+          pattern: '^[a-z0-9-]+$'
+          default: my-fastapi-service
+        description:
+          title: Description
+          type: string
+          default: Enterprise FastAPI service generated from Backstage.
+        owner:
+          title: Owner
+          type: string
+          default: platform-engineering
+        system:
+          title: System
+          type: string
+          default: srespace-platform
+        lifecycle:
+          title: Lifecycle
+          type: string
+          enum:
+            - experimental
+            - development
+            - production
+          default: development
+
+    - title: GitHub Repository
+      required:
+        - repoOwner
+        - repoName
+      properties:
+        repoOwner:
+          title: GitHub Owner
+          type: string
+          default: nolet7
+        repoName:
+          title: Repository Name
+          type: string
+          default: my-fastapi-service
+
+    - title: Runtime Configuration
+      required:
+        - dockerImage
+        - servicePort
+      properties:
+        dockerImage:
+          title: Docker Image
+          type: string
+          description: Example noletengine/my-fastapi-service:latest
+          default: noletengine/my-fastapi-service:latest
+        servicePort:
+          title: Service Port
+          type: number
+          default: 8000
+
+  steps:
+    - id: fetch-base
+      name: Generate service files
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          name: ${{ parameters.name }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          system: ${{ parameters.system }}
+          lifecycle: ${{ parameters.lifecycle }}
+          repoOwner: ${{ parameters.repoOwner }}
+          repoName: ${{ parameters.repoName }}
+          dockerImage: ${{ parameters.dockerImage }}
+          servicePort: ${{ parameters.servicePort }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: ${{ parameters.description }}
+        repoUrl: github.com?owner=${{ parameters.repoOwner }}&repo=${{ parameters.repoName }}
+        defaultBranch: main
+
+    - id: register
+      name: Register in Backstage catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /backstage/catalog-info.yaml
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
