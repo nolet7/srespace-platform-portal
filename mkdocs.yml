@@ -8,12 +8,12 @@ plugins:
 
 nav:
   - Overview:
-      - Getting Started: docs/index.md
-      - Local Setup: docs/local-setup.md
-      - Architecture: docs/architecture.md
+      - Getting Started: index.md
+      - Local Setup: local-setup.md
+      - Architecture: architecture.md
   - Operations:
-      - Runbook: docs/runbook.md
-      - Troubleshooting: docs/troubleshooting.md
+      - Runbook: runbook.md
+      - Troubleshooting: troubleshooting.md
   - Governance:
-      - Catalog Standards: docs/catalog-standards.md
-      - TechDocs Standards: docs/techdocs-standards.md
+      - Catalog Standards: catalog-standards.md
+      - TechDocs Standards: techdocs-standards.md
