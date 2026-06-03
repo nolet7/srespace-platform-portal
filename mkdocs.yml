@@ -1,5 +1,5 @@
 site_name: SRESpace Platform Portal
-site_description: Backstage developer portal for SRESpace platform engineering
+site_description: Enterprise Backstage developer portal for SRE and platform engineering
 repo_url: https://github.com/nolet7/srespace-platform-portal
 edit_uri: edit/main/docs/
 
@@ -7,13 +7,25 @@ plugins:
   - techdocs-core
 
 nav:
-  - Overview:
-      - Getting Started: index.md
+  - Start Here:
+      - Overview: index.md
+      - Executive Summary: executive-summary.md
       - Local Setup: local-setup.md
+  - Platform Architecture:
       - Architecture: architecture.md
-  - Operations:
-      - Runbook: runbook.md
-      - Troubleshooting: troubleshooting.md
-  - Governance:
+      - Operating Model: operating-model.md
+      - Security and Access: security-access.md
+  - Developer Experience:
+      - Service Onboarding: service-onboarding.md
+      - Software Templates: software-templates.md
       - Catalog Standards: catalog-standards.md
       - TechDocs Standards: techdocs-standards.md
+  - Operations:
+      - Runbook: runbook.md
+      - Observability and SLOs: observability-slo.md
+      - Kubernetes Platform: kubernetes-platform.md
+      - CI/CD and GitOps: cicd-gitops.md
+      - Disaster Recovery: disaster-recovery.md
+      - Troubleshooting: troubleshooting.md
+  - Governance:
+      - Platform Roadmap: platform-roadmap.md

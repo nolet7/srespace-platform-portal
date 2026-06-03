@@ -1,25 +1,41 @@
 # SRESpace Platform Portal
 
-The SRESpace Platform Portal is a Backstage-based internal developer portal for platform engineering, SRE, DevOps, and application onboarding.
+The **SRESpace Platform Portal** is an enterprise-style Backstage developer portal for SRE, Platform Engineering, DevOps, and application teams.
 
-## Purpose
+It provides one governed place to discover services, document ownership, generate new application scaffolds, publish operational runbooks, and standardize platform engineering practices across repositories.
 
-This portal provides a central place for application catalog ownership, developer documentation, software templates, GitHub integration, TechDocs publishing, platform engineering standards, and SRE operational visibility.
+## Business Purpose
 
-## Repository
+The portal helps reduce manual platform tickets by making common engineering requests self-service and auditable.
 
-https://github.com/nolet7/srespace-platform-portal
+| Capability | Business Value |
+|---|---|
+| Service catalog | Central ownership and system visibility |
+| TechDocs | Consistent documentation and runbooks |
+| Software templates | Faster service onboarding with standard controls |
+| GitHub integration | Repository discovery and catalog automation |
+| Kubernetes visibility | Platform-level workload awareness |
+| SRE documentation | Faster incident response and operational readiness |
 
-## Current Registered Services
+## Current Scope
 
-- python-app
-- backstage-portal
+| Area | Status |
+|---|---|
+| Backstage application | Running locally |
+| GitHub OAuth | Enabled |
+| PostgreSQL persistence | Enabled locally |
+| TechDocs | Enabled with MkDocs |
+| Catalog registration | Enabled |
+| Example service | `python-app` |
+| Platform portal entity | `backstage-portal` |
 
-## Platform Capabilities
+## Key Repositories
 
-- GitHub OAuth authentication
-- PostgreSQL-backed Backstage persistence
-- TechDocs with MkDocs
-- Catalog ingestion from GitHub repositories
-- Software templates for service scaffolding
-- Kubernetes and SRE operational documentation
+| Repository | Purpose |
+|---|---|
+| `nolet7/srespace-platform-portal` | Full Backstage portal application |
+| `nolet7/python-app` | Example application with catalog metadata and TechDocs |
+
+## Enterprise Outcomes
+
+This portal is designed to support faster onboarding, clear ownership, standardized documentation, repeatable deployment patterns, better incident response, improved audit readiness, and reduced operational toil.

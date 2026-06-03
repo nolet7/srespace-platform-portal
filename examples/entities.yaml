@@ -8,26 +8,7 @@ spec:
   domain: platform-engineering
 
 ---
-apiVersion: backstage.io/v1alpha1
-kind: Component
-metadata:
-  name: backstage-portal
-  description: Backstage developer portal for SRESpace platform engineering
-  annotations:
-    github.com/project-slug: nolet7/simple-argocd-app
-    backstage.io/kubernetes-id: backstage-portal
-    backstage.io/techdocs-ref: dir:.
-  tags:
-    - backstage
-    - platform-engineering
-    - sre
-spec:
-  type: website
-  lifecycle: development
-  owner: platform-engineering
-  system: srespace-platform
 
----
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
