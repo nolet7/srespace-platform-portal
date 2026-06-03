@@ -8,6 +8,7 @@ nav:
   - Overview: index.md
   - Architecture: architecture.md
   - Deployment: deployment.md
+  - CI/CD: cicd.md
   - Runbook: runbook.md
   - SLOs: slos.md
   - Troubleshooting: troubleshooting.md
