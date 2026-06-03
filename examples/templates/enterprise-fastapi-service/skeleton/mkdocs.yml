@@ -12,4 +12,5 @@ nav:
   - Runbook: runbook.md
   - SLOs: slos.md
   - Observability: observability.md
+  - Reliability: reliability.md
   - Troubleshooting: troubleshooting.md
