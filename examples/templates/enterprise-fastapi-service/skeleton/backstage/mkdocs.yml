@@ -11,4 +11,5 @@ nav:
   - CI/CD: cicd.md
   - Runbook: runbook.md
   - SLOs: slos.md
+  - Observability: observability.md
   - Troubleshooting: troubleshooting.md
