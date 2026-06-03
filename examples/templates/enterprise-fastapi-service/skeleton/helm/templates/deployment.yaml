@@ -18,12 +18,22 @@ spec:
         owner: ${{ values.owner }}
         system: ${{ values.system }}
     spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
       containers:
         - name: ${{ values.name }}
           image: ${{ values.dockerImage }}
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: ${{ values.servicePort }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
           readinessProbe:
             httpGet:
               path: /ready
