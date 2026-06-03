@@ -1,0 +1,12 @@
+site_name: ${{ values.serviceName }}
+site_description: TechDocs for ${{ values.serviceName }}
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Home: index.md
+  - Architecture: architecture.md
+  - Deployment: deployment.md
+  - Runbook: runbook.md
+  - SLOs: slos.md

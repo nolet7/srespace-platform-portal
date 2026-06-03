@@ -1,0 +1,24 @@
+apiVersion: backstage.io/v1alpha1
+kind: Group
+metadata:
+  name: platform-engineering
+  namespace: default
+  description: Platform Engineering Team
+spec:
+  type: team
+  profile:
+    displayName: Platform Engineering
+  children: []
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: User
+metadata:
+  name: nolet7
+  namespace: default
+spec:
+  profile:
+    displayName: Lateef Salam
+    email: nolet7@gmail.com
+  memberOf:
+    - platform-engineering

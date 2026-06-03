@@ -1,0 +1,13 @@
+site_name: SRESpace Platform Portal
+site_description: Backstage Developer Portal for SRE and Platform Engineering
+
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - Catalog: catalog.md
+  - GitHub Integration: github.md
+  - Kubernetes: kubernetes.md
+  - Operations: operations.md
+
+plugins:
+  - techdocs-core

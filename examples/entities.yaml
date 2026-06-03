@@ -1,0 +1,50 @@
+apiVersion: backstage.io/v1alpha1
+kind: System
+metadata:
+  name: srespace-platform
+  description: SRESpace internal developer platform
+spec:
+  owner: platform-engineering
+  domain: platform-engineering
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: backstage-portal
+  description: Backstage developer portal for SRESpace platform engineering
+  annotations:
+    github.com/project-slug: nolet7/simple-argocd-app
+    backstage.io/kubernetes-id: backstage-portal
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - backstage
+    - platform-engineering
+    - sre
+spec:
+  type: website
+  lifecycle: development
+  owner: platform-engineering
+  system: srespace-platform
+
+---
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: platform-api
+  description: Sample platform API
+spec:
+  type: openapi
+  lifecycle: development
+  owner: platform-engineering
+  definition: |
+    openapi: 3.0.0
+    info:
+      title: Platform API
+      version: 1.0.0
+    paths:
+      /health:
+        get:
+          responses:
+            '200':
+              description: OK

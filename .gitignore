@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+.yarn/cache/
+.yarn/install-state.gz
+
+# Local environment/secrets
+.env
+.env.*
+!.env.example
+
+# Local Backstage config overrides
+app-config.local.yaml
+app-config.local.yaml.bak.*
+*.bak.*
+
+# Python TechDocs virtual environment
+.venv-techdocs/
+
+# Build outputs
+dist/
+dist-types/
+coverage/
+.cache/
+tmp/
+.temp/
+
+# Databases/local state
+*.sqlite
+*.db
+
+# Logs
+*.log
+logs/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Generated TechDocs output
+.techdocs/
+site/
+
+# Generated TechDocs output
+.techdocs/
+site/
+
+# Extra protection for backup files
+.env.bak
+*.bak
+*.bak.*

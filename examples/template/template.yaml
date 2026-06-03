@@ -1,0 +1,142 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: production-python-service
+  title: Production Python FastAPI Service
+  description: Create a production-grade FastAPI service with Docker, GitHub Actions, Helm, Kubernetes, TechDocs, monitoring endpoints, and Backstage registration.
+  tags:
+    - recommended
+    - python
+    - fastapi
+    - kubernetes
+    - helm
+    - github-actions
+    - techdocs
+    - sre
+    - platform-engineering
+spec:
+  owner: platform-engineering
+  type: service
+
+  parameters:
+    - title: Service Identity
+      description: Define the service name, business purpose, ownership, and lifecycle.
+      required:
+        - serviceName
+        - description
+        - owner
+      properties:
+        serviceName:
+          title: Service Name
+          type: string
+          description: Lowercase service name. Use letters, numbers, and hyphens only.
+          pattern: '^[a-z0-9][a-z0-9-]{2,40}$'
+          ui:autofocus: true
+          examples:
+            - payment-api
+            - inventory-service
+            - reliability-api
+        description:
+          title: Description
+          type: string
+          description: Short business and technical description of the service.
+          default: Production-grade FastAPI service created from Backstage.
+        owner:
+          title: Owner
+          type: string
+          description: Owning Backstage group.
+          default: platform-engineering
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              kind:
+                - Group
+        lifecycle:
+          title: Lifecycle
+          type: string
+          default: development
+          enum:
+            - experimental
+            - development
+            - production
+
+    - title: Repository and Delivery
+      description: Choose where the new service repository will be created.
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: GitHub Repository Location
+          type: string
+          description: Choose the GitHub owner and repository name to create.
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+            allowedOwners:
+              - nolet7
+
+    - title: Runtime and Kubernetes
+      description: Define runtime, namespace, port, scaling, and deployment defaults.
+      properties:
+        port:
+          title: Application Port
+          type: number
+          default: 8000
+        namespace:
+          title: Kubernetes Namespace
+          type: string
+          default: apps
+        replicas:
+          title: Replica Count
+          type: number
+          default: 2
+        imageRegistry:
+          title: Image Registry
+          type: string
+          default: ghcr.io
+        enableServiceMonitor:
+          title: Enable Prometheus ServiceMonitor
+          type: boolean
+          default: true
+
+  steps:
+    - id: fetch
+      name: Generate service files
+      action: fetch:template
+      input:
+        url: ./content
+        values:
+          serviceName: ${{ parameters.serviceName }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          lifecycle: ${{ parameters.lifecycle }}
+          port: ${{ parameters.port }}
+          namespace: ${{ parameters.namespace }}
+          replicas: ${{ parameters.replicas }}
+          imageRegistry: ${{ parameters.imageRegistry }}
+          enableServiceMonitor: ${{ parameters.enableServiceMonitor }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        description: ${{ parameters.description }}
+        defaultBranch: main
+        repoVisibility: public
+        protectDefaultBranch: false
+    - id: register
+      name: Register in Backstage catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: Open Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open Catalog Component
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}

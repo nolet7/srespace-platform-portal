@@ -1,0 +1,83 @@
+app:
+  title: SRESpace Platform Portal
+  baseUrl: http://localhost:3002
+  packages: all
+
+backend:
+  baseUrl: http://localhost:7007
+  listen:
+    port: 7007
+  cors:
+    origin: http://localhost:3002
+    methods: [GET, HEAD, PATCH, POST, PUT, DELETE]
+    credentials: true
+  database:
+    client: pg
+    connection:
+      host: ${POSTGRES_HOST}
+      port: ${POSTGRES_PORT}
+      user: ${POSTGRES_USER}
+      password: ${POSTGRES_PASSWORD}
+      database: ${POSTGRES_DATABASE}
+
+integrations:
+  github:
+    - host: github.com
+      token: ${GITHUB_TOKEN}
+
+scaffolder:
+  defaultAuthor:
+    name: SRESpace Platform Portal
+    email: nolet7@gmail.com
+  defaultCommitMessage: "Initial commit from Backstage template"
+
+auth:
+  environment: development
+  providers:
+    github:
+      development:
+        clientId: ${AUTH_GITHUB_CLIENT_ID}
+        clientSecret: ${AUTH_GITHUB_CLIENT_SECRET}
+        signIn:
+          resolvers:
+            - resolver: usernameMatchingUserEntityName
+
+techdocs:
+  builder: 'local'
+  generator:
+    runIn: 'local'
+  publisher:
+    type: 'local'
+    local:
+      publishDirectory: ./.techdocs
+
+catalog:
+  locations:
+    - type: file
+      target: ../../catalog-user-nolet7.yaml
+      rules:
+        - allow: [User, Group]
+
+    - type: file
+      target: ../../examples/entities.yaml
+      rules:
+        - allow: [Component, API, Resource, System, Domain]
+
+    - type: file
+      target: ../../examples/template/template.yaml
+      rules:
+        - allow: [Template]
+
+  providers:
+    github:
+      nolet7PythonApp:
+        organization: 'nolet7'
+        catalogPath: '/backstage/catalog-info.yaml'
+        filters:
+          branch: 'main'
+          repository: '^python-app$'
+        schedule:
+          frequency:
+            minutes: 60
+          timeout:
+            minutes: 3
