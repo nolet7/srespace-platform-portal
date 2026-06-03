@@ -106,16 +106,14 @@ spec:
         repoUrl: github.com?owner=${{ parameters.repoOwner }}&repo=${{ parameters.repoName }}
         defaultBranch: main
 
-    - id: register
-      name: Register in Backstage catalog
-      action: catalog:register
-      input:
-        catalogInfoUrl: https://github.com/${{ parameters.repoOwner }}/${{ parameters.repoName }}/blob/main/backstage/catalog-info.yaml
 
   output:
     links:
       - title: Repository
         url: ${{ steps.publish.output.remoteUrl }}
-      - title: Open in catalog
+      - title: Register in Backstage Catalog
         icon: catalog
-        entityRef: ${{ steps.register.output.entityRef }}
+        url: http://localhost:3002/catalog-import
+
+      - title: Catalog Info URL
+        url: https://github.com/${{ parameters.repoOwner }}/${{ parameters.repoName }}/blob/main/backstage/catalog-info.yaml
