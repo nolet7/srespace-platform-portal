@@ -1,18 +1,35 @@
+# ${{ values.name }}
 
-${{ values.name }}
-Overview
+## Overview
 
-${{ values.description }}
+`${{ values.name }}` is an enterprise FastAPI service generated from the SRESpace Backstage golden-path template.
 
-Ownership
-Field	Value
-Owner	${{ values.owner }}
-Lifecycle	${{ values.lifecycle }}
-System	${{ values.system }}
-Repository	${{ values.repoOwner }}/${{ values.repoName }}
-Endpoints
-Endpoint	Purpose
-/	Service information
-/health	Liveness check
-/ready	Readiness check
-/metrics	Prometheus metrics
+## Ownership
+
+| Field | Value |
+|---|---|
+| Owner | ${{ values.owner }} |
+| Lifecycle | development |
+| System | ${{ values.system }} |
+| Repository | nolet7/${{ values.name }} |
+
+## Service Endpoints
+
+| Endpoint | Purpose |
+|---|---|
+| `/` | Service information |
+| `/health` | Liveness check |
+| `/ready` | Readiness check |
+| `/metrics` | Prometheus metrics |
+
+## Platform Standards
+
+This service includes:
+
+- FastAPI application structure
+- Dockerfile
+- Kubernetes manifests
+- Backstage catalog metadata
+- TechDocs documentation
+- SRE runbook
+- SLO documentation

@@ -1,15 +1,30 @@
+# Runbook
 
-Runbook
-Service Down
-Check pod status.
-Check service endpoints.
-Review logs.
-Validate image tag.
-Confirm readiness and liveness probes.
-Commands
-kubectl get pods -l app=${{ values.name }}
-kubectl describe deploy ${{ values.name }}
-kubectl logs deploy/${{ values.name }}
-Escalation
+## Service Down
 
-Escalate to ${{ values.owner }} when service health cannot be restored.
+Follow this sequence:
+
+1. Check pod status.
+2. Check deployment events.
+3. Review application logs.
+4. Validate image tag.
+5. Confirm readiness and liveness probes.
+6. Roll back if the latest deployment is unhealthy.
+
+## Commands
+
+Check pods:
+
+    kubectl get pods -l app=${{ values.name }}
+
+Describe deployment:
+
+    kubectl describe deploy ${{ values.name }}
+
+Check logs:
+
+    kubectl logs deploy/${{ values.name }}
+
+## Escalation
+
+Escalate to `${{ values.owner }}` if service health cannot be restored within the expected recovery window.
