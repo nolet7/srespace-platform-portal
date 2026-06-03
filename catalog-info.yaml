@@ -1,13 +1,20 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: backstage
-  description: An example of a Backstage application.
-  # Example for optional annotations
-  # annotations:
-  #   github.com/project-slug: backstage/backstage
-  #   backstage.io/techdocs-ref: dir:.
+  name: backstage-portal
+  namespace: default
+  description: Backstage developer portal for SRESpace platform engineering
+  annotations:
+    github.com/project-slug: nolet7/srespace-platform-portal
+    backstage.io/source-location: url:https://github.com/nolet7/srespace-platform-portal/tree/main/
+    backstage.io/techdocs-ref: dir:.
+  tags:
+    - backstage
+    - platform-engineering
+    - developer-portal
+    - sre
 spec:
   type: website
-  owner: john@example.com
-  lifecycle: experimental
+  lifecycle: development
+  owner: platform-engineering
+  system: srespace-platform
