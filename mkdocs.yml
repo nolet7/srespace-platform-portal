@@ -1,0 +1,19 @@
+site_name: SRESpace Platform Portal
+site_description: Backstage developer portal for SRESpace platform engineering
+repo_url: https://github.com/nolet7/srespace-platform-portal
+edit_uri: edit/main/docs/
+
+plugins:
+  - techdocs-core
+
+nav:
+  - Overview:
+      - Getting Started: docs/index.md
+      - Local Setup: docs/local-setup.md
+      - Architecture: docs/architecture.md
+  - Operations:
+      - Runbook: docs/runbook.md
+      - Troubleshooting: docs/troubleshooting.md
+  - Governance:
+      - Catalog Standards: docs/catalog-standards.md
+      - TechDocs Standards: docs/techdocs-standards.md
