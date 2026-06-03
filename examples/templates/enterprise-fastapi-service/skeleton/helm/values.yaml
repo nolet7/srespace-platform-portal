@@ -1,0 +1,26 @@
+replicaCount: 2
+
+image:
+  repository: ${{ values.dockerImage }}
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: ${{ values.servicePort }}
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+probes:
+  readinessPath: /ready
+  livenessPath: /health
+
+labels:
+  owner: ${{ values.owner }}
+  system: ${{ values.system }}
