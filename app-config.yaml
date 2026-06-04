@@ -116,6 +116,58 @@ catalog:
       rules:
         - allow: [Template]
 
+
+    # Platform Golden Path Templates
+    - type: file
+      target: ../../examples/templates/platform-templates/fastapi-service/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/node-api/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/react-frontend/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/fullstack-postgres/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/worker-service/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/docs-only/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/terraform-module/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/kubernetes-job/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/secure-service/template.yaml
+      rules:
+        - allow: [Template]
+
+    - type: file
+      target: ../../examples/templates/platform-templates/observability/template.yaml
+      rules:
+        - allow: [Template]
+
     # Local example organizational data
     - type: file
       target: ../../examples/org.yaml

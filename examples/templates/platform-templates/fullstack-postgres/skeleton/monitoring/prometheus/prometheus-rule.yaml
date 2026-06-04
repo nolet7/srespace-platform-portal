@@ -1,0 +1,76 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: ${{ values.component_id }}-slo-rules
+  namespace: monitoring
+  labels:
+    app.kubernetes.io/name: ${{ values.component_id }}
+    app.kubernetes.io/component: prometheus-rules
+    app.kubernetes.io/part-of: ${{ values.component_id }}
+    backstage.io/owner: ${{ values.owner }}
+spec:
+  groups:
+    - name: ${{ values.component_id }}.availability
+      rules:
+        - alert: ${{ values.component_id }}ServiceDown
+          expr: up{job="${{ values.component_id }}"} == 0
+          for: 2m
+          labels:
+            severity: critical
+            service: ${{ values.component_id }}
+          annotations:
+            summary: "${{ values.component_id }} service is down"
+            description: "Prometheus target for ${{ values.component_id }} has been down for more than 2 minutes."
+
+        - alert: ${{ values.component_id }}HighErrorRate
+          expr: |
+            (
+              sum(rate(http_requests_total{job="${{ values.component_id }}",status=~"5.."}[5m]))
+              /
+              sum(rate(http_requests_total{job="${{ values.component_id }}"}[5m]))
+            ) > 0.01
+          for: 5m
+          labels:
+            severity: warning
+            service: ${{ values.component_id }}
+          annotations:
+            summary: "${{ values.component_id }} has high 5xx error rate"
+            description: "5xx error rate is above 1% for more than 5 minutes."
+
+    - name: ${{ values.component_id }}.latency
+      rules:
+        - alert: ${{ values.component_id }}HighLatency
+          expr: |
+            histogram_quantile(
+              0.95,
+              sum(rate(http_request_duration_seconds_bucket{job="${{ values.component_id }}"}[5m])) by (le)
+            ) > 0.3
+          for: 10m
+          labels:
+            severity: warning
+            service: ${{ values.component_id }}
+          annotations:
+            summary: "${{ values.component_id }} p95 latency is high"
+            description: "p95 latency is above 300ms for more than 10 minutes."
+
+    - name: ${{ values.component_id }}.kubernetes
+      rules:
+        - alert: ${{ values.component_id }}PodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total{pod=~"${{ values.component_id }}.*"}[10m]) > 3
+          for: 5m
+          labels:
+            severity: critical
+            service: ${{ values.component_id }}
+          annotations:
+            summary: "${{ values.component_id }} pod is crash looping"
+            description: "One or more pods restarted more than 3 times in 10 minutes."
+
+        - alert: ${{ values.component_id }}DeploymentUnavailable
+          expr: kube_deployment_status_replicas_unavailable{deployment=~"${{ values.component_id }}.*"} > 0
+          for: 5m
+          labels:
+            severity: critical
+            service: ${{ values.component_id }}
+          annotations:
+            summary: "${{ values.component_id }} deployment has unavailable replicas"
+            description: "Kubernetes reports unavailable replicas for this deployment."

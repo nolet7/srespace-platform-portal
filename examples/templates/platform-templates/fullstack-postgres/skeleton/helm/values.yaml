@@ -1,0 +1,119 @@
+global:
+  appName: ${{ values.component_id }}
+  namespace: dev
+  owner: ${{ values.owner }}
+  environment: dev
+
+frontend:
+  name: ${{ values.component_id }}
+  replicaCount: 2
+  image:
+    repository: noletengine/${{ values.component_id }}
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 80
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+api:
+  name: ${{ values.component_id }}-api
+  replicaCount: 2
+  image:
+    repository: noletengine/${{ values.component_id }}-api
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8000
+    targetPort: 8000
+  env:
+    APP_ENV: dev
+    DB_HOST: ${{ values.component_id }}-postgres
+    DB_PORT: "5432"
+    DB_NAME: appdb
+    DB_USER: appuser
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+postgres:
+  enabled: true
+  name: ${{ values.component_id }}-postgres
+  replicaCount: 1
+  image:
+    repository: postgres
+    tag: "16"
+    pullPolicy: IfNotPresent
+  database: appdb
+  username: appuser
+  password: changeme-dev-password
+  service:
+    type: ClusterIP
+    port: 5432
+    targetPort: 5432
+  persistence:
+    enabled: true
+    size: 2Gi
+    storageClassName: ""
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
+
+ingress:
+  enabled: true
+  className: nginx
+  host: ${{ values.component_id }}.localhost
+  path: /
+  pathType: Prefix
+  apiPath: /api
+  apiPathType: Prefix
+
+serviceAccount:
+  create: true
+  name: ${{ values.component_id }}-sa
+
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  fsGroup: 1000
+
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
+  capabilities:
+    drop:
+      - ALL
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+monitoring:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+    interval: 30s
+    path: /metrics
+
+labels:
+  app.kubernetes.io/managed-by: Helm
+  app.kubernetes.io/part-of: ${{ values.component_id }}
+  backstage.io/owner: ${{ values.owner }}

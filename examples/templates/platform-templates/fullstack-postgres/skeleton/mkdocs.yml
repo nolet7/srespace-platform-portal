@@ -1,0 +1,21 @@
+site_name: ${{ values.component_id }}
+site_description: ${{ values.description }}
+
+nav:
+  - Home: index.md
+  - Architecture:
+      - Overview: architecture/overview.md
+      - Deployment Flow: architecture/deployment-flow.md
+  - Operations:
+      - Runbook: operations/runbook.md
+      - SLOs: operations/slo.md
+      - Alerts: operations/alerts.md
+  - Security:
+      - Threat Model: security/threat-model.md
+      - DevSecOps Controls: security/devsecops-controls.md
+  - Runbooks:
+      - Incident Response: runbooks/incident-response.md
+      - Rollback: runbooks/rollback.md
+
+plugins:
+  - techdocs-core

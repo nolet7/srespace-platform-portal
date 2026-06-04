@@ -1,0 +1,129 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: fullstack-postgres-golden-path
+  title: Full-Stack PostgreSQL Golden Path
+  description: Creates a production-ready full-stack app with frontend, API, PostgreSQL, Docker, Helm, GitHub Actions, Argo CD, DevSecOps scans, observability, and TechDocs.
+  tags:
+    - recommended
+    - fullstack
+    - postgres
+    - platform-engineering
+    - devops
+    - devsecops
+spec:
+  owner: group:default/platform-engineering
+  type: service
+
+  parameters:
+    - title: Application Information
+      required:
+        - component_id
+        - owner
+        - description
+      properties:
+        component_id:
+          title: Component Name
+          type: string
+          description: Name of the new application. Example reviewly, inventory-api, financehub.
+          pattern: '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
+        description:
+          title: Description
+          type: string
+          description: Short description of the application.
+        owner:
+          title: Owner
+          type: string
+          description: Backstage owner entity.
+          default: group:default/platform-engineering
+
+    - title: Platform Options
+      required:
+        - deployment_type
+        - ci_tool
+        - observability
+        - security_level
+      properties:
+        deployment_type:
+          title: Deployment Method
+          type: string
+          enum:
+            - helm-argocd
+            - helm-github-actions
+            - kustomize-argocd
+          default: helm-argocd
+        ci_tool:
+          title: CI/CD Tool
+          type: string
+          enum:
+            - github-actions
+            - tekton
+            - jenkins
+          default: github-actions
+        observability:
+          title: Observability Stack
+          type: string
+          enum:
+            - prometheus-grafana-loki
+            - prometheus-grafana-tempo
+            - opentelemetry-prometheus-grafana
+          default: prometheus-grafana-loki
+        security_level:
+          title: DevSecOps Security Level
+          type: string
+          enum:
+            - basic
+            - standard
+            - enterprise
+          default: enterprise
+
+    - title: Repository
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: GitHub Repository
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: fetch
+      name: Fetch Application Skeleton
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          deployment_type: ${{ parameters.deployment_type }}
+          ci_tool: ${{ parameters.ci_tool }}
+          observability: ${{ parameters.observability }}
+          security_level: ${{ parameters.security_level }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        description: ${{ parameters.description }}
+        defaultBranch: main
+        repoVisibility: public
+
+    - id: register
+      name: Register in Backstage Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: Open Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in Backstage Catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}

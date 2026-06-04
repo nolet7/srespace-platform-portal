@@ -1,0 +1,29 @@
+name: CI-CD Starter
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate:
+    name: Validate Repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show files
+        run: |
+          echo "Repository files:"
+          find . -maxdepth 4 -type f | sort
+
+      - name: Check required Backstage files
+        run: |
+          test -f catalog-info.yaml
+          test -f mkdocs.yml
+          test -f README.md
+          test -f docs/index.md

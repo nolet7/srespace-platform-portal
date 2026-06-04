@@ -1,0 +1,11 @@
+site_name: ${{ values.component_id }}
+site_description: ${{ values.description }}
+
+nav:
+  - Home: index.md
+  - Architecture: architecture/overview.md
+  - Operations: operations/runbook.md
+  - Security: security/devsecops.md
+
+plugins:
+  - techdocs-core

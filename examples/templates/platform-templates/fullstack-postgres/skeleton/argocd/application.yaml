@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${{ values.component_id }}
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: ${{ values.component_id }}
+    app.kubernetes.io/component: argocd-application
+    app.kubernetes.io/part-of: ${{ values.component_id }}
+    backstage.io/owner: ${{ values.owner }}
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/nolet7/${{ values.component_id }}.git
+    targetRevision: main
+    path: helm
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: dev
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+
+  revisionHistoryLimit: 5

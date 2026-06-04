@@ -1,0 +1,22 @@
+{{- if .Values.monitoring.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Values.global.appName }}-api-servicemonitor
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.global.appName }}-api-servicemonitor
+    app.kubernetes.io/component: monitoring
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: {{ .Values.global.appName }}
+    backstage.io/owner: {{ .Values.global.owner | quote }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ .Values.api.name }}
+      app.kubernetes.io/component: api
+  endpoints:
+    - port: http
+      path: {{ .Values.monitoring.serviceMonitor.path }}
+      interval: {{ .Values.monitoring.serviceMonitor.interval }}
+{{- end }}

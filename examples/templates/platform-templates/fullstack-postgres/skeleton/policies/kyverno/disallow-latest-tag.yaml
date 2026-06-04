@@ -1,0 +1,26 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: disallow-latest-image-tag
+  annotations:
+    policies.kyverno.io/title: Disallow Latest Image Tag
+    policies.kyverno.io/category: Supply Chain Security
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: Using the latest image tag makes deployments non-repeatable and can introduce unverified image changes.
+spec:
+  validationFailureAction: Audit
+  background: true
+  rules:
+    - name: require-fixed-image-tag
+      match:
+        any:
+          - resources:
+              kinds:
+                - Pod
+      validate:
+        message: "Images must not use the latest tag. Use a versioned tag or image digest."
+        pattern:
+          spec:
+            containers:
+              - image: "!*:latest"

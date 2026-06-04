@@ -1,0 +1,24 @@
+apiVersion: v2
+name: ${{ values.component_id }}
+description: Helm chart for ${{ values.component_id }} generated from the Backstage Full-Stack PostgreSQL Golden Path template.
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+
+keywords:
+  - backstage
+  - platform-engineering
+  - fullstack
+  - postgres
+  - kubernetes
+  - helm
+  - argocd
+  - devsecops
+
+maintainers:
+  - name: Platform Engineering Team
+    email: platform-team@example.com
+
+annotations:
+  backstage.io/template: fullstack-postgres-golden-path
+  backstage.io/owner: ${{ values.owner }}

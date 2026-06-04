@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>${{ values.component_id }}</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f4f7fb;
+        color: #1f2937;
+      }
+
+      header {
+        background: #111827;
+        color: white;
+        padding: 24px;
+        text-align: center;
+      }
+
+      main {
+        max-width: 1000px;
+        margin: 40px auto;
+        padding: 24px;
+      }
+
+      .card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #e0f2fe;
+        color: #075985;
+        font-size: 13px;
+        margin: 4px;
+      }
+
+      footer {
+        text-align: center;
+        padding: 24px;
+        color: #6b7280;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <h1>${{ values.component_id }}</h1>
+      <p>${{ values.description }}</p>
+    </header>
+
+    <main>
+      <section class="card">
+        <h2>Generated from Backstage</h2>
+        <p>
+          This application was created from the Full-Stack PostgreSQL Golden Path template.
+        </p>
+      </section>
+
+      <section class="card">
+        <h2>Included Platform Capabilities</h2>
+        <div class="grid">
+          <div>
+            <h3>DevOps</h3>
+            <span class="badge">GitHub Actions</span>
+            <span class="badge">Docker</span>
+            <span class="badge">Helm</span>
+            <span class="badge">Argo CD</span>
+          </div>
+
+          <div>
+            <h3>DevSecOps</h3>
+            <span class="badge">Gitleaks</span>
+            <span class="badge">Semgrep</span>
+            <span class="badge">Trivy</span>
+            <span class="badge">Checkov</span>
+          </div>
+
+          <div>
+            <h3>Observability</h3>
+            <span class="badge">Prometheus</span>
+            <span class="badge">Grafana</span>
+            <span class="badge">Loki</span>
+            <span class="badge">OpenTelemetry</span>
+          </div>
+
+          <div>
+            <h3>Documentation</h3>
+            <span class="badge">Backstage</span>
+            <span class="badge">Software Catalog</span>
+            <span class="badge">TechDocs</span>
+            <span class="badge">Runbooks</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Health Check</h2>
+        <p>Backend API health endpoint:</p>
+        <pre>/api/health</pre>
+      </section>
+    </main>
+
+    <footer>
+      Owner: ${{ values.owner }}
+    </footer>
+  </body>
+</html>

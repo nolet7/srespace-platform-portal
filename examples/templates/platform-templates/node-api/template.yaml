@@ -1,0 +1,82 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: node-api-golden-path
+  title: Node.js API Golden Path
+  description: Creates a Node.js API with Docker, GitHub Actions, Helm, Argo CD, security scans, observability, and TechDocs.
+  tags:
+    - platform-engineering
+    - devops
+    - devsecops
+    - techdocs
+spec:
+  owner: group:default/platform-engineering
+  type: service
+
+  parameters:
+    - title: Application Information
+      required:
+        - component_id
+        - description
+        - owner
+      properties:
+        component_id:
+          title: Component Name
+          type: string
+          description: Lowercase name. Example payment-api.
+          pattern: '^([a-z][a-z0-9]*)(-[a-z0-9]+)*$'
+        description:
+          title: Description
+          type: string
+          default: Creates a Node.js API with Docker, GitHub Actions, Helm, Argo CD, security scans, observability, and TechDocs.
+        owner:
+          title: Owner
+          type: string
+          default: group:default/platform-engineering
+
+    - title: Repository
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: GitHub Repository
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+
+  steps:
+    - id: fetch
+      name: Fetch Skeleton
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          component_id: ${{ parameters.component_id }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        repoUrl: ${{ parameters.repoUrl }}
+        description: ${{ parameters.description }}
+        defaultBranch: main
+        repoVisibility: public
+
+    - id: register
+      name: Register in Backstage Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: /catalog-info.yaml
+
+  output:
+    links:
+      - title: Open Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+      - title: Open in Backstage Catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}

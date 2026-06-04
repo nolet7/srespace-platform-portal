@@ -1,0 +1,69 @@
+{{- if and .Values.networkPolicy .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ .Values.global.appName }}-network-policy
+  namespace: {{ .Values.global.namespace }}
+  labels:
+    app.kubernetes.io/name: {{ .Values.global.appName }}
+    app.kubernetes.io/component: network-policy
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/part-of: {{ .Values.global.appName }}
+    backstage.io/owner: {{ .Values.global.owner | quote }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: {{ .Values.global.appName }}
+  policyTypes:
+    - Ingress
+    - Egress
+
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: {{ .Values.global.appName }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.frontend.service.targetPort }}
+        - protocol: TCP
+          port: {{ .Values.api.service.targetPort }}
+        - protocol: TCP
+          port: {{ .Values.postgres.service.targetPort }}
+
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: {{ .Values.frontend.service.targetPort }}
+        - protocol: TCP
+          port: {{ .Values.api.service.targetPort }}
+
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/part-of: {{ .Values.global.appName }}
+      ports:
+        - protocol: TCP
+          port: {{ .Values.api.service.targetPort }}
+        - protocol: TCP
+          port: {{ .Values.postgres.service.targetPort }}
+
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+      ports:
+        - protocol: TCP
+          port: 443
+{{- end }}
